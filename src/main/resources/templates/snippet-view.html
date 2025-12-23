@@ -1,49 +1,94 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
 <head>
-    <title th:text="${snippet.title}">Snippet Viewer</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <title th:text="${snippet.title} + ' | CodeSV'">Visualizar Snippet</title>
     <th:block th:replace="~{fragments :: head-common}"></th:block>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+
     <style>
-        pre {
-            border-radius: 8px;
-            margin-top: 1rem;
-            border: 1px solid #333;
+        /* O "palco" do print */
+        #export-container {
+            padding: 4rem;
+            border-radius: 12px;
+            display: inline-block;
+            min-width: 800px;
+            /* Gradiente Roxo/Azul Cyberpunk para contraste máximo */
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        /* A Janela Carbon (CSS de Alta Definição) */
+        .carbon-window {
+            /* Fundo sólido escuro para garantir opacidade total no PNG */
+            background-color: #151718 !important;
+
+            /* Sombra Dupla: Uma curta para definição, uma longa para profundidade 3D */
+            box-shadow:
+                    0 5px 15px rgba(0, 0, 0, 0.8),
+                    0 15px 35px -5px rgba(0, 0, 0, 0.6) !important;
+
+            /* Borda mais visível para separar do gradiente */
+            border: 1px solid rgba(255, 255, 255, 0.25) !important;
+
+            border-radius: 12px;
+            overflow: hidden; /* Mantém o código dentro das bordas arredondadas */
+        }
+
+        /* Customização do Prism.js para encaixar na Janela */
+        pre[class*="language-"] {
+            margin: 0 !important;
+            border: none !important;
+            border-radius: 0 0 12px 12px !important; /* Arredonda só embaixo */
+            padding: 2rem 2.5rem !important; /* Espaçamento generoso */
+
+            font-family: 'JetBrains Mono', monospace !important;
+            font-size: 15px !important;
+            line-height: 1.7 !important;
+
+            /* Força o fundo a ser idêntico ao cabeçalho da janela (#151718)
+               para parecer uma peça única e sólida */
+            background-color: #151718 !important;
+            text-shadow: none !important; /* Remove sombras de texto padrão do Prism para mais nitidez */
+        }
+
+        /* Ajuste fino na barra de título */
+        .window-header {
+            background-color: #151718; /* Mesma cor do editor */
+            padding: 1rem 1.5rem 0.5rem 1.5rem;
         }
     </style>
 </head>
 <body>
 
-<h1 class="codesv-title">CodeSV</h1>
+<div th:replace="~{fragments :: top-nav}"></div>
 
-<div class="codesv-window">
-    <div class="window-controls mb-3">
-        <span class="dot red"></span>
-        <span class="dot yellow"></span>
-        <span class="dot green"></span>
-    </div>
+<div class="container mt-5 pb-5">
 
-    <div class="d-flex justify-content-between align-items-start border-bottom border-secondary pb-3 mb-3">
+    <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="text-white mb-1" th:text="${snippet.title}">Título do Código</h2>
-            <div class="text-muted small">
-                <span class="badge bg-primary me-2" th:text="${snippet.language}">Java</span>
-                Criado em: <span th:text="${#temporals.format(snippet.createdAt, 'dd/MM/yyyy HH:mm')}"></span>
-                Por: <span th:text="${snippet.getAuthor().getLogin()}">Autor</span>
-            </div>
+            <h2 class="text-white mb-0">Visualizar Snippet</h2>
+            <small class="text-muted">
+                Autor: <span th:text="${snippet.getAuthor().getLogin()}">User</span>
+                | <span th:text="${#temporals.format(snippet.createdAt, 'dd/MM/yyyy HH:mm')}">Data</span>
+            </small>
         </div>
+
         <div class="d-flex gap-2 align-items-center">
+            <a th:href="@{/snippets/{id}/download(id=${snippet.id})}" class="btn btn-outline-secondary btn-sm" title="Baixar arquivo fonte">
+                <i class="bi bi-file-earmark-code"></i> Baixar Código
+            </a>
+
+            <button onclick="exportToPng()" class="btn btn-success btn-sm text-white" title="Gerar imagem para redes sociais">
+                <i class="bi bi-camera"></i> Baixar PNG
+            </button>
 
             <th:block th:if="${isOwner}">
-                <a th:href="@{/snippets/{id}/edit(id=${snippet.id})}" class="btn btn-outline-warning btn-sm">
-                    Editar
-                </a>
+                <div class="vr bg-secondary mx-1"></div>
+                <a th:href="@{/snippets/{id}/edit(id=${snippet.id})}" class="btn btn-outline-warning btn-sm">Editar</a>
                 <form th:action="@{/snippets/{id}/delete(id=${snippet.id})}" method="post"
-                      onsubmit="return confirm('Tem certeza...?');"
+                      onsubmit="return confirm('Tem certeza absoluta que deseja excluir este snippet?');"
                       style="display: inline;">
-                    <button type="submit" class="btn btn-outline-danger btn-sm">
-                        Excluir
-                    </button>
+                    <button type="submit" class="btn btn-outline-danger btn-sm">Excluir</button>
                 </form>
             </th:block>
 
@@ -51,17 +96,69 @@
         </div>
     </div>
 
-    <pre><code th:class="'language-' + ${snippet.language}"
-               th:text="${snippet.content}">
-            // O código renderizado aparecerá aqui
-        </code></pre>
+    <div class="d-flex justify-content-center overflow-auto">
+        <div id="export-container">
+
+            <div class="carbon-window" style="max-width: 900px;">
+                <div class="window-header d-flex align-items-center">
+                    <div class="window-controls d-flex gap-2 me-3">
+                        <span class="dot red"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                    </div>
+                    <span class="text-muted small font-monospace opacity-75"
+                          th:text="${snippet.title}">Algoritmo.java</span>
+                </div>
+
+                <pre><code th:classappend="'language-' + ${snippet.language.toLowerCase()}"
+                           th:text="${snippet.content}">
+                </code></pre>
+
+                <div class="pb-3 pe-4 text-end bg-transparent" style="background-color: #151718; margin-top: -10px;">
+                    <small class="text-muted opacity-25 font-monospace" style="font-size: 10px; letter-spacing: 1px;">CODE.SV</small>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
 </div>
 
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+<script>
+    function exportToPng() {
+        const element = document.getElementById("export-container");
+        const btn = document.querySelector("button[onclick='exportToPng()']");
+        const originalText = btn.innerHTML;
+
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Gerando...';
+        btn.disabled = true;
+
+        html2canvas(element, {
+            backgroundColor: null, /* Respeita a transparência/gradiente CSS */
+            scale: 2,              /* Alta resolução (Retina) */
+            logging: false,
+            useCORS: true          /* Permite carregar fontes/ícones externos */
+        }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = 'codesv-share.png';
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }).catch(err => {
+            console.error("Erro no export:", err);
+            alert("Erro ao gerar imagem.");
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        });
+    }
+</script>
+
 </body>
 </html>

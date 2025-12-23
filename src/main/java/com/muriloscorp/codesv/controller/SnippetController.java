@@ -157,7 +157,4 @@ public class SnippetController {
         redirect.addFlashAttribute("success", "Snippet excluído com sucesso!");
         return "redirect:/snippets";
     }
-
-    @GetMapping("/{id}/download")
-    public String downloadSnippet(@PathVariable UUID id) {}
 }
