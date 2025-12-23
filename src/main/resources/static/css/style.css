@@ -1,8 +1,8 @@
 :root {
     --bg-color: #101010;
-    --card-bg: #1e1e1e; /* Um pouco mais claro que o fundo */
+    --card-bg: #1e1e1e;
     --hollow-color: rgba(255, 255, 255, 0.8);
-    --accent-color: #79ffa8; /* Um verde neon estilo terminal, opcional */
+    --accent-color: #79ffa8;
 }
 
 body {
@@ -25,9 +25,8 @@ body {
     text-transform: uppercase;
     letter-spacing: -3px;
     margin-bottom: 2rem;
-    margin-top: -10vh; /* Puxa para "um pouco acima do meio" */
+    margin-top: -10vh;
 
-    /* O Segredo do Vazado */
     color: transparent;
     -webkit-text-stroke: 2px var(--hollow-color);
     position: relative;
@@ -36,21 +35,18 @@ body {
 }
 
 .codesv-title:hover {
-    /* Preenche sutilmente ao passar o mouse */
     color: rgba(255, 255, 255, 0.05);
     -webkit-text-stroke: 2px #fff;
     filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.3));
 }
 
-/* --- Container Estilo Carbon (A Janela) --- */
-.carbon-window {
+.codesv-window {
     background-color: var(--card-bg);
     width: 100%;
     max-width: 900px;
     border-radius: 12px;
     padding: 2rem;
 
-    /* Sombra profunda característica do Carbon */
     box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.7),
     0 30px 60px -30px rgba(0, 0, 0, 0.8);
     border: 1px solid #333;
@@ -70,7 +66,6 @@ body {
 .dot.yellow { background-color: #ffbd2e; }
 .dot.green { background-color: #27c93f; }
 
-/* Ajustes de Bootstrap para Dark Mode */
 .form-control, .form-select {
     background-color: #2b2b2b !important;
     border: 1px solid #444 !important;
@@ -87,8 +82,6 @@ body {
     from { opacity: 0; transform: translateY(40px); }
     to { opacity: 1; transform: translateY(0); }
 }
-
-/* --- Correção de Legibilidade para Dark Mode --- */
 
 /* Força os labels a serem claros, ignorando o text-muted do Bootstrap se houver */
 .form-label, .text-muted {

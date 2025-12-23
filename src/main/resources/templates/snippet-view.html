@@ -19,7 +19,7 @@
 
 <h1 class="codesv-title">CodeSV</h1>
 
-<div class="carbon-window">
+<div class="codesv-window">
     <div class="window-controls mb-3">
         <span class="dot red"></span>
         <span class="dot yellow"></span>
@@ -34,7 +34,19 @@
                 Criado em: <span th:text="${#temporals.format(snippet.createdAt, 'dd/MM/yyyy HH:mm')}"></span>
             </div>
         </div>
-        <a href="/snippets" class="btn btn-outline-light btn-sm">Voltar</a>
+        <div class="d-flex gap-2 align-items-center">
+            <a th:href="@{/snippets/{id}/edit(id=${snippet.id})}" class="btn btn-outline-warning btn-sm">
+                Editar
+            </a>
+            <form th:action="@{/snippets/{id}/delete(id=${snippet.id})}" method="post"
+                  onsubmit="return confirm('Tem certeza absoluta que deseja excluir este snippet? A ação não pode ser desfeita.');"
+                  style="display: inline;">
+                <button type="submit" class="btn btn-outline-danger btn-sm">
+                    Excluir
+                </button>
+            </form>
+            <a href="/snippets" class="btn btn-outline-light btn-sm ms-2">Voltar</a>
+        </div>
     </div>
 
     <pre><code th:class="'language-' + ${snippet.language}"

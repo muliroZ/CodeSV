@@ -11,7 +11,7 @@
 
 <h1 class="codesv-title">CodeSV</h1>
 
-<div class="carbon-window">
+<div class="codesv-window">
   <div class="window-controls">
     <span class="dot red"></span>
     <span class="dot yellow"></span>
@@ -43,7 +43,7 @@
   </div>
 
   <div th:if="${#lists.isEmpty(snippets)}" class="text-center py-5">
-    <p class="text-muted">_console.log("Nenhum snippet encontrado");</p>
+    <p class="text-muted styled">console.<span style="color: #ff852e">log</span><span style="color: #ffbd2e">(</span><span style="color: #9acd23">"Nenhum snippet encontrado"</span><span style="color: #ffbd2e">)</span>;</p>
   </div>
 </div>
 
