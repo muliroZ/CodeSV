@@ -4,54 +4,70 @@
   <meta charset="UTF-8">
   <title>Novo Snippet</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/style.css"> <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;800&display=swap" rel="stylesheet">
   <style>
-    .code-input { font-family: monospace; font-size: 14px; tab-size: 4; }
+    .code-input {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      tab-size: 4;
+      background-color: #2b2b2b !important;
+      color: #a9b7c6 !important;
+      border-color: #444;
+    }
   </style>
 </head>
-<body class="bg-light">
-<div class="container mt-5">
-  <div class="card shadow">
-    <div class="card-body">
-      <h2>Criar Snippet</h2>
-      <form th:action="@{/snippets/save}" th:object="${snippetForm}" method="post">
+<body>
 
-        <div class="mb-3">
-          <label class="form-label">Título</label>
-          <input type="text" th:field="*{title}" class="form-control" placeholder="Ex: Algoritmo de Busca Binária">
-          <div class="text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
-        </div>
+<h1 class="codesv-title">CodeSV</h1>
 
-        <div class="mb-3">
-          <label class="form-label">Linguagem</label>
-          <select th:field="*{language}" class="form-select">
-            <option value="">Selecione...</option>
-            <option value="java">Java</option>
-            <option value="python">Python</option>
-            <option value="javascript">JavaScript</option>
-            <option value="cpp">C++</option>
-          </select>
-          <div class="text-danger" th:if="${#fields.hasErrors('language')}" th:errors="*{language}"></div>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label">Código</label>
-          <textarea th:field="*{content}" class="form-control code-input" rows="10" placeholder="Cole seu código aqui..."></textarea>
-          <div class="text-danger" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></div>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Salvar Snippet</button>
-        <a href="/snippets" class="btn btn-secondary">Cancelar</a>
-      </form>
-    </div>
+<div class="carbon-window">
+  <div class="window-controls">
+    <span class="dot red"></span>
+    <span class="dot yellow"></span>
+    <span class="dot green"></span>
   </div>
+
+  <h2 class="text-white mb-4">Criar Snippet</h2>
+
+  <form th:action="@{/snippets/save}" th:object="${snippetForm}" method="post">
+
+    <div class="mb-3">
+      <label class="form-label">Título</label>
+      <input type="text" th:field="*{title}" class="form-control" placeholder="Ex: Algoritmo de Busca Binária">
+      <div class="text-danger mt-1" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Linguagem</label>
+      <select th:field="*{language}" class="form-select">
+        <option value="">Selecione...</option>
+        <option value="java">Java</option>
+        <option value="python">Python</option>
+        <option value="javascript">JavaScript</option>
+        <option value="cpp">C++</option>
+      </select>
+      <div class="text-danger mt-1" th:if="${#fields.hasErrors('language')}" th:errors="*{language}"></div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Código</label>
+      <textarea th:field="*{content}" class="form-control code-input" rows="12" placeholder="// Cole seu código aqui..."></textarea>
+      <div class="text-danger mt-1" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></div>
+    </div>
+
+    <div class="d-flex justify-content-end gap-2">
+      <a href="/snippets" class="btn btn-outline-secondary">Cancelar</a>
+      <button type="submit" class="btn btn-success">Salvar Snippet</button>
+    </div>
+  </form>
 </div>
 
 <script>
   document.querySelector('textarea').addEventListener('keydown', function(e) {
     if (e.key === 'Tab') {
       e.preventDefault();
-      var start = this.selectionStart;
-      var end = this.selectionEnd;
+      const start = this.selectionStart;
+      const end = this.selectionEnd;
       this.value = this.value.substring(0, start) + "\t" + this.value.substring(end);
       this.selectionStart = this.selectionEnd = start + 1;
     }

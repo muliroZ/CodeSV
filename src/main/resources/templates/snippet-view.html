@@ -4,30 +4,50 @@
     <meta charset="UTF-8">
     <title th:text="${snippet.title}">Snippet Viewer</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;800&display=swap" rel="stylesheet">
     <style>
-        .container { max-width: 900px; margin: 0 auto; padding: 20px; font-family: sans-serif; }
-        .metadata { color: #666; margin-bottom: 20px; }
-        pre { border-radius: 8px; }
+        pre {
+            border-radius: 8px;
+            margin-top: 1rem;
+            border: 1px solid #333;
+        }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1 th:text="${snippet.title}">Título do Código</h1>
 
-    <div class="metadata">
-        Linguagem: <span th:text="${snippet.language}">Java</span> |
-        Criado em: <span th:text="${#temporals.format(snippet.createdAt, 'dd/MM/yyyy HH:mm')}">01/01/2024</span>
+<h1 class="codesv-title">CodeSV</h1>
+
+<div class="carbon-window">
+    <div class="window-controls mb-3">
+        <span class="dot red"></span>
+        <span class="dot yellow"></span>
+        <span class="dot green"></span>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-start border-bottom border-secondary pb-3 mb-3">
+        <div>
+            <h2 class="text-white mb-1" th:text="${snippet.title}">Título do Código</h2>
+            <div class="text-muted small">
+                <span class="badge bg-primary me-2" th:text="${snippet.language}">Java</span>
+                Criado em: <span th:text="${#temporals.format(snippet.createdAt, 'dd/MM/yyyy HH:mm')}"></span>
+            </div>
+        </div>
+        <a href="/snippets" class="btn btn-outline-light btn-sm">Voltar</a>
     </div>
 
     <pre><code th:class="'language-' + ${snippet.language}"
                th:text="${snippet.content}">
             // O código renderizado aparecerá aqui
         </code></pre>
-
-    <a href="/snippets"> Voltar para a lista</a>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
 </body>
 </html>
