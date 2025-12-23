@@ -16,6 +16,7 @@ body {
     min-height: 100vh;
     margin: 0;
     overflow-x: hidden;
+    overflow-y: auto;
 }
 
 /* --- Efeito de Título Vazado (Hollow) --- */
@@ -103,4 +104,62 @@ body {
 /* Ajuste específico para o select ficar consistente */
 .form-select {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") !important;
+}
+
+/* --- Navegação Superior (Auth) --- */
+.top-nav {
+    position: absolute;
+    top: 2rem;
+    right: 3rem;
+    z-index: 100; /* Garante que fique acima de tudo */
+    display: flex;
+    gap: 1rem;
+}
+
+.btn-carbon {
+    background: rgba(30, 30, 30, 0.6); /* Fundo semi-transparente */
+    backdrop-filter: blur(10px);        /* Efeito "Frosted Glass" */
+    border: 1px solid #444;
+    color: #e0e0e0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    letter-spacing: 0.5px;
+}
+
+/* Efeito Hover: Brilho Neon suave na borda e texto */
+.btn-carbon:hover {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+    box-shadow: 0 0 15px rgba(121, 255, 168, 0.15); /* Glow sutil */
+    transform: translateY(-1px);
+}
+
+/* Opcional: Botão "Primary" (Cadastro) com preenchimento sutil */
+.btn-carbon.primary {
+    background: rgba(121, 255, 168, 0.1);
+    border-color: rgba(121, 255, 168, 0.4);
+    color: var(--accent-color);
+}
+
+.btn-carbon.primary:hover {
+    background: var(--accent-color);
+    color: #000; /* Texto preto para contraste no fundo neon */
+    box-shadow: 0 0 20px rgba(121, 255, 168, 0.4);
+}
+
+.btn-carbon.danger {
+    background: rgba(255, 95, 86, 0.1);
+    border-color: rgba(255, 95, 86, 0.4);
+    color: #ff5f56;
+    padding: 0.6rem 0.8rem; /* Um pouco menor, pois é só ícone */
+}
+
+.btn-carbon.danger:hover {
+    background: #ff5f56;
+    color: #fff;
+    box-shadow: 0 0 15px rgba(255, 95, 86, 0.4);
 }

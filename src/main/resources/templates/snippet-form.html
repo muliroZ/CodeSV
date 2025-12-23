@@ -1,11 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
   <title>Novo Snippet</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/css/style.css">
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;800&display=swap" rel="stylesheet">
+  <th:block th:replace="~{fragments :: head-common}"></th:block>
   <style>
     #monaco-container {
       width: 100%;
@@ -54,6 +51,14 @@
         <option value="sql">SQL</option>
       </select>
       <div class="text-danger mt-1" th:if="${#fields.hasErrors('language')}" th:errors="*{language}"></div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Visibilidade</label>
+      <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" id="visibility" th:field="*{publicSnippet}">
+        <label class="form-check-label" for="visibility">Marcar como público</label>
+      </div>
     </div>
 
     <div class="mb-3">

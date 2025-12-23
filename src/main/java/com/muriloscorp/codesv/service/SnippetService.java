@@ -3,6 +3,7 @@ package com.muriloscorp.codesv.service;
 import com.muriloscorp.codesv.dto.SnippetRequest;
 import com.muriloscorp.codesv.exception.SnippetNotFoundException;
 import com.muriloscorp.codesv.model.CodeSnippet;
+import com.muriloscorp.codesv.model.User;
 import com.muriloscorp.codesv.repository.SnippetRepository;
 import org.springframework.stereotype.Service;
 
@@ -18,13 +19,18 @@ public class SnippetService {
         this.snippetRepository = snippetRepository;
     }
 
-    public void save(SnippetRequest request){
+    public void save(SnippetRequest request, User author){
         CodeSnippet snippet = SnippetRequest.toEntity(request);
+        snippet.setAuthor(author);
         snippetRepository.save(snippet);
     }
 
     public List<CodeSnippet> findAll(){
-        return snippetRepository.findAll();
+        return snippetRepository.findByIsPublic(true);
+    }
+
+    public List<CodeSnippet> findByAuthorId(UUID authorId) {
+        return snippetRepository.findByAuthorId(authorId);
     }
 
     public CodeSnippet findById(UUID id) {

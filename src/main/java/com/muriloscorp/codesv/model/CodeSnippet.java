@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.UUID;
 
 @Getter
@@ -30,10 +32,16 @@ public class CodeSnippet {
     @Column(nullable = false)
     private String language;
 
-    private LocalDate createdAt;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User author;
+
+    private boolean isPublic;
+
+    private LocalDateTime createdAt;
 
     @PrePersist
     public void prePersist(){
-        createdAt = LocalDate.now();
+        createdAt = LocalDateTime.now(ZoneId.of("America/Sao_Paulo"));
     }
 }

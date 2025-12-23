@@ -1,12 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
     <title th:text="${snippet.title}">Snippet Viewer</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;800&display=swap" rel="stylesheet">
+    <th:block th:replace="~{fragments :: head-common}"></th:block>
     <style>
         pre {
             border-radius: 8px;
@@ -32,19 +29,24 @@
             <div class="text-muted small">
                 <span class="badge bg-primary me-2" th:text="${snippet.language}">Java</span>
                 Criado em: <span th:text="${#temporals.format(snippet.createdAt, 'dd/MM/yyyy HH:mm')}"></span>
+                Por: <span th:text="${snippet.getAuthor().getLogin()}">Autor</span>
             </div>
         </div>
         <div class="d-flex gap-2 align-items-center">
-            <a th:href="@{/snippets/{id}/edit(id=${snippet.id})}" class="btn btn-outline-warning btn-sm">
-                Editar
-            </a>
-            <form th:action="@{/snippets/{id}/delete(id=${snippet.id})}" method="post"
-                  onsubmit="return confirm('Tem certeza absoluta que deseja excluir este snippet? A ação não pode ser desfeita.');"
-                  style="display: inline;">
-                <button type="submit" class="btn btn-outline-danger btn-sm">
-                    Excluir
-                </button>
-            </form>
+
+            <th:block th:if="${isOwner}">
+                <a th:href="@{/snippets/{id}/edit(id=${snippet.id})}" class="btn btn-outline-warning btn-sm">
+                    Editar
+                </a>
+                <form th:action="@{/snippets/{id}/delete(id=${snippet.id})}" method="post"
+                      onsubmit="return confirm('Tem certeza...?');"
+                      style="display: inline;">
+                    <button type="submit" class="btn btn-outline-danger btn-sm">
+                        Excluir
+                    </button>
+                </form>
+            </th:block>
+
             <a href="/snippets" class="btn btn-outline-light btn-sm ms-2">Voltar</a>
         </div>
     </div>
