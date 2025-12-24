@@ -39,5 +39,33 @@
   </div>
 </div>
 
+<footer th:fragment="footer" class="py-4 mt-5 border-top border-secondary border-opacity-25"
+        style="background-color: #151515;">
+  <div class="container text-center">
+
+    <div class="d-flex justify-content-center gap-4 mb-3 flex-wrap">
+      <a href="https://github.com/muliroZ/CodeSV" target="_blank" class="footer-link">
+        <i class="bi bi-github"></i> GitHub
+      </a>
+      <a href="#" class="footer-link">
+        <i class="bi bi-book"></i> Documentação
+      </a>
+      <a href="#" class="footer-link">
+        <i class="bi bi-shield-check"></i> Termos de Uso
+      </a>
+      <a href="mailto:murilomega100@gmail.com" class="footer-link">
+        <i class="bi bi-envelope"></i> Contato
+      </a>
+    </div>
+
+    <div class="text-muted small opacity-50 font-monospace">
+      &copy; <span th:text="${#temporals.format(#temporals.createNow(), 'yyyy')}">2025</span>
+      CodeSV. Desenvolvido por <span style="color: var(--accent-color); text-decoration: none; cursor: pointer">
+      <a href="https://github.com/muliroZ">muliroZ</a></span>.
+    </div>
+
+  </div>
+</footer>
+
 </body>
 </html>

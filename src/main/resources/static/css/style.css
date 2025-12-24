@@ -8,13 +8,19 @@
 body {
     background-color: var(--bg-color) !important;
     color: #e0e0e0;
-    font-family: 'JetBrains Mono', 'Fira Code', monospace; /* Fontes mono ficam ótimas aqui */
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+
     min-height: 100vh;
     margin: 0;
+
+    padding-top: 80px;
+    padding-bottom: 0;
+
+    box-sizing: border-box; /* Garante que o padding não aumente a largura total */
     overflow-x: hidden;
     overflow-y: auto;
 }
@@ -26,13 +32,14 @@ body {
     text-transform: uppercase;
     letter-spacing: -3px;
     margin-bottom: 2rem;
-    margin-top: -10vh;
+    margin-top: 0;
 
     color: transparent;
     -webkit-text-stroke: 2px var(--hollow-color);
     position: relative;
     z-index: 10;
     transition: all 0.3s ease;
+    text-align: center; /* Garante alinhamento em telas menores */
 }
 
 .codesv-title:hover {
@@ -162,4 +169,26 @@ body {
     background: #ff5f56;
     color: #fff;
     box-shadow: 0 0 15px rgba(255, 95, 86, 0.4);
+}
+
+.footer-link {
+    color: rgba(255, 255, 255, 0.5);
+    text-decoration: none;
+    transition: color 0.3s ease, transform 0.2s ease;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.footer-link:hover {
+    color: var(--accent-color);
+    transform: translateY(-2px);
+}
+
+footer {
+    margin-top: auto; /* Empurra o footer para o fundo no layout Flex */
+    width: 100%;
+    position: relative;
+    z-index: 10;
 }
