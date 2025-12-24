@@ -4,57 +4,163 @@
     <title th:text="${snippet.title} + ' | CodeSV'">Visualizar Snippet</title>
     <th:block th:replace="~{fragments :: head-common}"></th:block>
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=JetBrains+Mono:wght@400;500&family=Roboto+Mono:wght@400;500&family=Source+Code+Pro:wght@400;600&family=Ubuntu+Mono&display=swap" rel="stylesheet">
 
     <style>
-        /* O "palco" do print */
+        code[class*="language-"], pre[class*="language-"] {
+            color: #ccc;
+            background: none;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 15px;
+            text-align: left;
+            white-space: pre;
+            word-spacing: normal;
+            word-break: normal;
+            word-wrap: normal;
+            line-height: 1.7;
+            tab-size: 4;
+            hyphens: none;
+        }
+
+        /* TEMA: TOMORROW NIGHT (Padrão) */
+        .theme-tomorrow .carbon-window { background-color: #2d2d2d; border: 1px solid rgba(255,255,255,0.1); }
+        .theme-tomorrow pre, .theme-tomorrow code { color: #ccc; text-shadow: none; }
+        .theme-tomorrow .token.comment, .theme-tomorrow .token.block-comment, .theme-tomorrow .token.prolog, .theme-tomorrow .token.doctype, .theme-tomorrow .token.cdata { color: #999; }
+        .theme-tomorrow .token.punctuation { color: #ccc; }
+        .theme-tomorrow .token.tag, .theme-tomorrow .token.attr-name, .theme-tomorrow .token.namespace, .theme-tomorrow .token.deleted { color: #e2777a; }
+        .theme-tomorrow .token.function-name { color: #61aeee; }
+        .theme-tomorrow .token.boolean, .theme-tomorrow .token.number, .theme-tomorrow .token.function { color: #f08d49; }
+        .theme-tomorrow .token.property, .theme-tomorrow .token.class-name, .theme-tomorrow .token.constant, .theme-tomorrow .token.symbol { color: #f8c555; }
+        .theme-tomorrow .token.selector, .theme-tomorrow .token.important, .theme-tomorrow .token.atrule, .theme-tomorrow .token.keyword, .theme-tomorrow .token.builtin { color: #cc99cd; }
+        .theme-tomorrow .token.string, .theme-tomorrow .token.char, .theme-tomorrow .token.attr-value, .theme-tomorrow .token.regex, .theme-tomorrow .token.variable { color: #7ec699; }
+        .theme-tomorrow .token.operator, .theme-tomorrow .token.entity, .theme-tomorrow .token.url { color: #67cdcc; }
+        .theme-tomorrow .window-header { background-color: rgba(255,255,255,0.05); }
+
+        /* TEMA: MONOKAI (Okaidia) */
+        .theme-monokai .carbon-window { background-color: #272822; }
+        .theme-monokai pre, .theme-monokai code { color: #f8f8f2; text-shadow: 0 1px rgba(0,0,0,0.3); }
+        .theme-monokai .token.comment, .theme-monokai .token.prolog, .theme-monokai .token.doctype, .theme-monokai .token.cdata { color: #8292a2; }
+        .theme-monokai .token.punctuation { color: #f8f8f2; }
+        .theme-monokai .token.namespace { opacity: .7; }
+        .theme-monokai .token.property, .theme-monokai .token.tag, .theme-monokai .token.constant, .theme-monokai .token.symbol, .theme-monokai .token.deleted { color: #f92672; }
+        .theme-monokai .token.boolean, .theme-monokai .token.number { color: #ae81ff; }
+        .theme-monokai .token.selector, .theme-monokai .token.attr-name, .theme-monokai .token.string, .theme-monokai .token.char, .theme-monokai .token.builtin, .theme-monokai .token.inserted { color: #a6e22e; }
+        .theme-monokai .token.operator, .theme-monokai .token.entity, .theme-monokai .token.url, .theme-monokai .token.variable { color: #f8f8f2; }
+        .theme-monokai .token.atrule, .theme-monokai .token.attr-value, .theme-monokai .token.function, .theme-monokai .token.class-name { color: #e6db74; }
+        .theme-monokai .token.keyword { color: #66d9ef; }
+
+        /* TEMA: OCEAN (Material Dark) */
+        .theme-ocean .carbon-window { background-color: #0f111a; }
+        .theme-ocean pre, .theme-ocean code { color: #8f93a2; text-shadow: none; }
+        .theme-ocean .token.comment, .theme-ocean .token.prolog, .theme-ocean .token.doctype, .theme-ocean .token.cdata { color: #464b5d; }
+        .theme-ocean .token.punctuation { color: #8f93a2; }
+        .theme-ocean .token.property, .theme-ocean .token.tag, .theme-ocean .token.boolean, .theme-ocean .token.number, .theme-ocean .token.constant, .theme-ocean .token.symbol, .theme-ocean .token.deleted { color: #ff5370; }
+        .theme-ocean .token.selector, .theme-ocean .token.attr-name, .theme-ocean .token.string, .theme-ocean .token.char, .theme-ocean .token.builtin, .theme-ocean .token.inserted { color: #c3e88d; }
+        .theme-ocean .token.operator, .theme-ocean .token.entity, .theme-ocean .token.url, .theme-ocean .token.variable { color: #8f93a2; }
+        .theme-ocean .token.atrule, .theme-ocean .token.attr-value, .theme-ocean .token.function, .theme-ocean .token.class-name { color: #82aaff; }
+        .theme-ocean .token.keyword { color: #c792ea; }
+
+        /* TEMA: LIGHT (Solarized) */
+        .theme-light .carbon-window { background-color: #fdf6e3; border: 1px solid #ccc; }
+        .theme-light .window-header { background-color: #eee8d5; border-bottom: 1px solid #dcdcdc; }
+        .theme-light .window-controls span { border: 1px solid rgba(0,0,0,0.1); } /* Bordas nos bolinhas para contraste */
+        .theme-light pre, .theme-light code { color: #657b83; text-shadow: none; }
+        .theme-light .token.comment, .theme-light .token.prolog, .theme-light .token.doctype, .theme-light .token.cdata { color: #93a1a1; }
+        .theme-light .token.punctuation { color: #586e75; }
+        .theme-light .token.namespace { opacity: .7; }
+        .theme-light .token.property, .theme-light .token.tag, .theme-light .token.boolean, .theme-light .token.number, .theme-light .token.constant, .theme-light .token.symbol, .theme-light .token.deleted { color: #268bd2; }
+        .theme-light .token.selector, .theme-light .token.attr-name, .theme-light .token.string, .theme-light .token.char, .theme-light .token.builtin, .theme-light .token.url, .theme-light .token.inserted { color: #2aa198; }
+        .theme-light .token.entity { color: #657b83; background: #eee8d5; }
+        .theme-light .token.atrule, .theme-light .token.attr-value, .theme-light .token.keyword { color: #859900; }
+        .theme-light .token.function, .theme-light .token.class-name { color: #b58900; }
+        .theme-light .token.regex, .theme-light .token.important, .theme-light .token.variable { color: #cb4b16; }
+
         #export-container {
             padding: 4rem;
             border-radius: 12px;
             display: inline-block;
-            min-width: 800px;
-            /* Gradiente Roxo/Azul Cyberpunk para contraste máximo */
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            width: -moz-fit-content;
+            width: fit-content;
+            min-width: 450px;
+            background-size: cover;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) center;
+            transition: all 0.2s ease;
         }
 
-        /* A Janela Carbon (CSS de Alta Definição) */
         .carbon-window {
-            /* Fundo sólido escuro para garantir opacidade total no PNG */
-            background-color: #151718 !important;
-
-            /* Sombra Dupla: Uma curta para definição, uma longa para profundidade 3D */
-            box-shadow:
-                    0 5px 15px rgba(0, 0, 0, 0.8),
-                    0 15px 35px -5px rgba(0, 0, 0, 0.6) !important;
-
-            /* Borda mais visível para separar do gradiente */
-            border: 1px solid rgba(255, 255, 255, 0.25) !important;
-
+            /* Cor baseada no tema */
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
             border-radius: 12px;
-            overflow: hidden; /* Mantém o código dentro das bordas arredondadas */
+            overflow: hidden;
+            transition: box-shadow 0.2s ease;
         }
 
-        /* Customização do Prism.js para encaixar na Janela */
         pre[class*="language-"] {
             margin: 0 !important;
             border: none !important;
-            border-radius: 0 0 12px 12px !important; /* Arredonda só embaixo */
-            padding: 2rem 2.5rem !important; /* Espaçamento generoso */
-
-            font-family: 'JetBrains Mono', monospace !important;
-            font-size: 15px !important;
-            line-height: 1.7 !important;
-
-            /* Força o fundo a ser idêntico ao cabeçalho da janela (#151718)
-               para parecer uma peça única e sólida */
-            background-color: #151718 !important;
-            text-shadow: none !important; /* Remove sombras de texto padrão do Prism para mais nitidez */
+            border-radius: 0 0 12px 12px !important;
+            padding: 2rem 2.5rem !important;
         }
 
-        /* Ajuste fino na barra de título */
         .window-header {
-            background-color: #151718; /* Mesma cor do editor */
             padding: 1rem 1.5rem 0.5rem 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+        }
+
+        .tools-panel {
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .gradient-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .gradient-btn:hover, .gradient-btn.active {
+            transform: scale(1.2);
+            border-color: #fff;
+            box-shadow: 0 0 10px rgba(255,255,255,0.2);
+        }
+
+        .control-label {
+            font-size: 0.7rem;
+            color: #888;
+            margin-bottom: 0.4rem;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            font-weight: 700;
+        }
+
+        .tools-panel .form-select,
+        .tools-panel .form-control {
+            background-color: #252525;
+            border-color: #444;
+            color: #ddd;
+            font-size: 0.85rem;
+        }
+
+        .tools-panel .form-range {
+            height: 4px;
+        }
+        .tools-panel .form-range::-webkit-slider-thumb {
+            background: var(--accent-color);
+        }
+
+        .panel-divider {
+            border-right: 1px solid rgba(255,255,255,0.1);
         }
     </style>
 </head>
@@ -66,94 +172,223 @@
 
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="text-white mb-0">Visualizar Snippet</h2>
+            <h2 class="text-white mb-0">Estúdio Criativo</h2>
             <small class="text-muted">
                 Autor: <span th:text="${snippet.getAuthor().getLogin()}">User</span>
-                | <span th:text="${#temporals.format(snippet.createdAt, 'dd/MM/yyyy HH:mm')}">Data</span>
             </small>
         </div>
 
         <div class="d-flex gap-2 align-items-center">
-            <a th:href="@{/snippets/{id}/download(id=${snippet.id})}" class="btn btn-outline-secondary btn-sm" title="Baixar arquivo fonte">
-                <i class="bi bi-file-earmark-code"></i> Baixar Código
-            </a>
+            <a href="/snippets" class="btn btn-outline-light btn-sm">Voltar</a>
 
-            <button onclick="exportToPng()" class="btn btn-success btn-sm text-white" title="Gerar imagem para redes sociais">
-                <i class="bi bi-camera"></i> Baixar PNG
-            </button>
+            <a th:href="@{/snippets/{id}/download(id=${snippet.id})}" class="btn btn-outline-secondary btn-sm" title="Baixar Fonte">
+                <i class="bi bi-code-slash"></i>
+            </a>
 
             <th:block th:if="${isOwner}">
                 <div class="vr bg-secondary mx-1"></div>
-                <a th:href="@{/snippets/{id}/edit(id=${snippet.id})}" class="btn btn-outline-warning btn-sm">Editar</a>
+                <a th:href="@{/snippets/{id}/edit(id=${snippet.id})}" class="btn btn-outline-warning btn-sm"><i class="bi bi-pencil"></i></a>
                 <form th:action="@{/snippets/{id}/delete(id=${snippet.id})}" method="post"
                       onsubmit="return confirm('Tem certeza absoluta que deseja excluir este snippet?');"
                       style="display: inline;">
-                    <button type="submit" class="btn btn-outline-danger btn-sm">Excluir</button>
+                    <button type="submit" class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i></button>
                 </form>
+                <div class="vr bg-secondary mx-1"></div>
             </th:block>
 
-            <a href="/snippets" class="btn btn-outline-light btn-sm ms-2">Voltar</a>
+            <button onclick="exportToPng()" class="btn btn-success btn-sm text-white fw-bold px-3">
+                <i class="bi bi-camera-fill me-1"></i> Baixar PNG
+            </button>
         </div>
     </div>
 
-    <div class="d-flex justify-content-center overflow-auto">
-        <div id="export-container">
+    <div class="tools-panel">
+        <div class="row g-4">
 
-            <div class="carbon-window" style="max-width: 900px;">
-                <div class="window-header d-flex align-items-center">
-                    <div class="window-controls d-flex gap-2 me-3">
-                        <span class="dot red"></span>
-                        <span class="dot yellow"></span>
-                        <span class="dot green"></span>
-                    </div>
-                    <span class="text-muted small font-monospace opacity-75"
-                          th:text="${snippet.title}">Algoritmo.java</span>
+            <div class="col-md-4 panel-divider">
+                <label class="control-label"><i class="bi bi-palette"></i> Fundo</label>
+
+                <div class="d-flex gap-2 flex-wrap mb-3">
+                    <div class="gradient-btn active" onclick="setGradient(this, 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)')" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)"></div>
+                    <div class="gradient-btn" onclick="setGradient(this, 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)')" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%)"></div>
+                    <div class="gradient-btn" onclick="setGradient(this, 'linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%)')" style="background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%)"></div>
+                    <div class="gradient-btn" onclick="setGradient(this, 'linear-gradient(135deg, #434343 0%, #000000 100%)')" style="background: linear-gradient(135deg, #434343 0%, #000000 100%)"></div>
+                    <div class="gradient-btn" onclick="setGradient(this, 'linear-gradient(to right, #4facfe 0%, #00f2fe 100%)')" style="background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%)"></div>
                 </div>
 
-                <pre><code th:classappend="'language-' + ${snippet.language.toLowerCase()}"
-                           th:text="${snippet.content}">
-                </code></pre>
+                <div class="d-flex gap-2">
+                    <input type="color" class="form-control form-control-color form-control-sm" id="bgColorPicker" value="#667eea" title="Cor Sólida">
+                    <input type="file" class="form-control form-control-sm" id="bgImageInput" accept="image/*">
+                </div>
+            </div>
 
-                <div class="pb-3 pe-4 text-end bg-transparent" style="background-color: #151718; margin-top: -10px;">
-                    <small class="text-muted opacity-25 font-monospace" style="font-size: 10px; letter-spacing: 1px;">CODE.SV</small>
+            <div class="col-md-4 panel-divider">
+                <label class="control-label"><i class="bi bi-code-square"></i> Editor</label>
+
+                <div class="mb-2">
+                    <select class="form-select form-select-sm" id="themeSelect" onchange="changeTheme()">
+                        <option value="theme-tomorrow" selected>Tema: Tomorrow Night</option>
+                        <option value="theme-monokai">Tema: Monokai</option>
+                        <option value="theme-ocean">Tema: Ocean</option>
+                        <option value="theme-light">Tema: Light (Solarized)</option>
+                    </select>
+                </div>
+
+                <div class="mb-2">
+                    <select class="form-select form-select-sm" id="fontFamilySelect" onchange="updateFont()">
+                        <option value="'JetBrains Mono', monospace" selected>Fonte: JetBrains Mono</option>
+                        <option value="'Fira Code', monospace">Fonte: Fira Code</option>
+                        <option value="'Source Code Pro', monospace">Fonte: Source Code Pro</option>
+                        <option value="'Roboto Mono', monospace">Fonte: Roboto Mono</option>
+                    </select>
+                </div>
+
+                <div class="d-flex align-items-center justify-content-between">
+                    <span class="text-muted small" style="font-size: 0.7rem;">Espaçamento</span>
+                    <input type="range" class="form-range w-50" id="lineHeightRange" min="1.0" max="2.5" step="0.1" value="1.7" oninput="updateLineHeight()">
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <label class="control-label"><i class="bi bi-aspect-ratio"></i> Ajustes</label>
+
+                <div class="d-flex align-items-center justify-content-between mb-1">
+                    <span class="text-muted small" style="font-size: 0.7rem;">Pad X</span>
+                    <input type="range" class="form-range w-50" id="paddingXRange" min="1" max="8" step="0.5" value="4" oninput="updatePadding()">
+                </div>
+
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <span class="text-muted small" style="font-size: 0.7rem;">Pad Y</span>
+                    <input type="range" class="form-range w-50" id="paddingYRange" min="1" max="8" step="0.5" value="4" oninput="updatePadding()">
+                </div>
+
+                <div class="d-flex align-items-center justify-content-between mb-1">
+                    <span class="text-muted small" style="font-size: 0.7rem;">Sombra</span>
+                    <input type="range" class="form-range w-50" id="shadowBlurRange" min="0" max="100" step="5" value="50" oninput="updateShadow()">
                 </div>
             </div>
 
         </div>
     </div>
 
+    <div class="d-flex justify-content-center overflow-auto py-4 bg-dark rounded border border-secondary"
+         style="background-image: radial-gradient(#2a2a2a 1px, transparent 1px); background-size: 20px 20px; min-height: 400px; align-items: center;">
+
+        <div id="export-container">
+            <div id="theme-wrapper" class="theme-tomorrow">
+                <div id="carbonWindow" class="carbon-window" style="max-width: none;">
+                    <div class="window-header">
+                        <div class="window-controls d-flex gap-2 me-3">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                        </div>
+                        <span class="text-muted small font-monospace opacity-75" th:text="${snippet.title}">Code.java</span>
+                    </div>
+
+                    <pre id="codePre"><code th:classappend="'language-' + ${snippet.language.toLowerCase()}"
+                                            th:text="${snippet.content}"></code></pre>
+
+                    <div class="pb-3 pe-4 text-end bg-transparent" style="margin-top: -10px;">
+                        <small class="text-muted opacity-25 font-monospace" style="font-size: 10px; letter-spacing: 1px;">CODE.SV</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
 
 <script>
+    const container = document.getElementById('export-container');
+    const windowEl = document.getElementById('carbonWindow');
+    const codePre = document.getElementById('codePre');
+    const themeWrapper = document.getElementById('theme-wrapper');
+
+    const colorPicker = document.getElementById('bgColorPicker');
+    const imageInput = document.getElementById('bgImageInput');
+
+    function setGradient(element, gradientValue) {
+        container.style.background = gradientValue;
+        document.querySelectorAll('.gradient-btn').forEach(btn => btn.classList.remove('active'));
+        if(element) element.classList.add('active');
+        imageInput.value = '';
+    }
+
+    colorPicker.addEventListener('input', (e) => {
+        container.style.background = e.target.value;
+        document.querySelectorAll('.gradient-btn').forEach(btn => btn.classList.remove('active'));
+    });
+
+    imageInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                container.style.background = `url(${event.target.result})`;
+                container.style.backgroundSize = 'cover';
+                container.style.backgroundPosition = 'center';
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+
+    function updateFont() {
+        const font = document.getElementById('fontFamilySelect').value;
+        codePre.style.setProperty('font-family', font, 'important');
+        const codeEl = codePre.querySelector('code');
+        if(codeEl) codeEl.style.setProperty('font-family', font, 'important');
+    }
+
+    function updateLineHeight() {
+        codePre.style.setProperty('line-height', document.getElementById('lineHeightRange').value, 'important');
+    }
+
+    function changeTheme() {
+        const selectedTheme = document.getElementById('themeSelect').value;
+        themeWrapper.className = '';
+        themeWrapper.classList.add(selectedTheme);
+    }
+
+    function updatePadding() {
+        const px = document.getElementById('paddingXRange').value;
+        const py = document.getElementById('paddingYRange').value;
+        container.style.padding = `${py}rem ${px}rem`;
+    }
+
+    function updateShadow() {
+        const blur = document.getElementById('shadowBlurRange').value;
+        windowEl.style.boxShadow = `0 20px ${blur}px rgba(0,0,0,0.6)`;
+    }
+
     function exportToPng() {
         const element = document.getElementById("export-container");
         const btn = document.querySelector("button[onclick='exportToPng()']");
         const originalText = btn.innerHTML;
 
-        btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Gerando...';
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
         btn.disabled = true;
 
         html2canvas(element, {
-            backgroundColor: null, /* Respeita a transparência/gradiente CSS */
-            scale: 2,              /* Alta resolução (Retina) */
+            backgroundColor: null,
+            scale: 2,
             logging: false,
-            useCORS: true          /* Permite carregar fontes/ícones externos */
+            useCORS: true,
+            allowTaint: true
         }).then(canvas => {
             const link = document.createElement('a');
             link.download = 'codesv-share.png';
             link.href = canvas.toDataURL("image/png");
             link.click();
-
             btn.innerHTML = originalText;
             btn.disabled = false;
         }).catch(err => {
-            console.error("Erro no export:", err);
-            alert("Erro ao gerar imagem.");
+            console.error(err);
+            alert("Erro ao exportar. Tente novamente.");
             btn.innerHTML = originalText;
             btn.disabled = false;
         });
