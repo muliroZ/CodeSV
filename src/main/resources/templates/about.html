@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+  <title>Sobre | CodeSV</title>
+  <th:block th:replace="~{fragments :: head-common}"></th:block>
+  <style>
+    .tech-badge {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      color: #ccc;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .feature-icon {
+      font-size: 2rem;
+      color: var(--accent-color);
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+<div th:replace="~{fragments :: top-nav}"></div>
+
+<h1 class="codesv-title">CodeSV</h1>
+
+<div class="codesv-window">
+  <div class="window-controls">
+    <span class="dot red"></span>
+    <span class="dot yellow"></span>
+    <span class="dot green"></span>
+  </div>
+
+  <div class="text-center mb-5">
+    <h2 class="text-white mb-3">Sobre o Projeto</h2>
+    <p class="text-muted mx-auto" style="max-width: 600px;">
+      O <strong>CodeSV</strong> é uma plataforma moderna desenvolvida para simplificar a forma como programadores armazenam, partilham e exportam os seus snippets de código favoritos.
+    </p>
+  </div>
+
+  <div class="row text-center mb-5">
+    <div class="col-md-4 mb-4">
+      <div class="p-3">
+        <i class="bi bi-camera feature-icon"></i>
+        <h5 class="text-white">Exportação Estética</h5>
+        <p class="text-muted small">Gere imagens PNG de alta resolução com estilo "Dark/Hacker" para partilhar nas redes sociais.</p>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="p-3">
+        <i class="bi bi-github feature-icon"></i>
+        <h5 class="text-white">Login Social</h5>
+        <p class="text-muted small">Acesso rápido e seguro através da sua conta GitHub, sem necessidade de novos registros.</p>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="p-3">
+        <i class="bi bi-code-square feature-icon"></i>
+        <h5 class="text-white">Editor Poderoso</h5>
+        <p class="text-muted small">Experiência de edição fluida com o Monaco Editor e Syntax Highlighting via Prism.js.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="border-top border-secondary pt-4">
+    <h6 class="text-white mb-3">Tecnologias Utilizadas</h6>
+    <div class="d-flex flex-wrap gap-2">
+      <span class="tech-badge"><i class="bi bi-cup-hot"></i> Java 21</span>
+      <span class="tech-badge"><i class="bi bi-flower1"></i> Spring Boot 3</span>
+      <span class="tech-badge"><i class="bi bi-database"></i> PostgreSQL</span>
+      <span class="tech-badge"><i class="bi bi-box-seam"></i> Docker</span>
+      <span class="tech-badge"><i class="bi bi-filetype-html"></i> Thymeleaf</span>
+      <span class="tech-badge"><i class="bi bi-bootstrap"></i> Bootstrap 5</span>
+    </div>
+  </div>
+
+  <div class="mt-5 text-end">
+    <small class="text-muted">
+      Desenvolvido com <i class="bi bi-heart-fill text-danger"></i> por
+      <a href="https://github.com/muliroZ" target="_blank" class="text-white text-decoration-none">muliroZ</a>.
+    </small>
+  </div>
+
+</div>
+
+<div th:replace="~{fragments :: footer}"></div>
+
+</body>
+</html>

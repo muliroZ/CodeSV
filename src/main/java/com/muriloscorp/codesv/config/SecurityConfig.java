@@ -24,10 +24,12 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers(
+                            "/",
                             "/snippets",
                             "/snippets/{id}",
                             "/snippets/{id}/download",
                             "/snippets/new",
+                            "/about",
                             "/css/**",
                             "/js/**",
                             "/images/**"
