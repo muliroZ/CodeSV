@@ -7,7 +7,7 @@
 
 > **CodeSV** é uma plataforma moderna para armazenar, gerenciar e compartilhar trechos de código (snippets). Com foco na experiência do desenvolvedor, permite exportar códigos como imagens estéticas (estilo Carbon/Ray.so) e compartilhar conhecimentos com a comunidade.
 
-![Preview do CodeSV](codesv-share.png)
+![Preview do CodeSV](assets/codesv-default.png)
 
 ---
 
@@ -93,9 +93,9 @@ Acesse a aplicação em: **http://localhost:8080/snippets**
 
 # 📸 Telas
 
-| Tela Inicial (Comunidade) | Editor de Código            |
-|---------------------------|-----------------------------|
-| -                         | Interface com Monaco Editor |
+| Tela Inicial (Comunidade)                                 | Editor de Código                                               | View do Snippet                                                |
+|-----------------------------------------------------------|----------------------------------------------------------------|----------------------------------------------------------------|
+| ![Comunidade](assets/codesv-logged.png)Tela de Comunidade | ![Editor](assets/codesv-editor.png)Interface com Monaco Editor | ![Visualização](assets/codesv-view.png)Visualização Estilizada |
 
 ---
 
