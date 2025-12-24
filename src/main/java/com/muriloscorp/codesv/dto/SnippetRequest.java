@@ -2,11 +2,16 @@ package com.muriloscorp.codesv.dto;
 
 import com.muriloscorp.codesv.model.CodeSnippet;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 public record SnippetRequest(
-        @NotBlank(message = "O título é obrigatório") String title,
-        @NotBlank(message = "O conteúdo não pode estar vazio") String content,
-        @NotBlank(message = "Selecione uma linguagem") String language,
+        @NotBlank(message = "O título é obrigatório")
+        String title,
+        @Size(max = 10000, message = "O código é muito longo (máx 10k caracteres)")
+        @NotBlank(message = "O conteúdo não pode estar vazio")
+        String content,
+        @NotBlank(message = "Selecione uma linguagem")
+        String language,
         boolean publicSnippet
 ) {
     public static SnippetRequest empty() {

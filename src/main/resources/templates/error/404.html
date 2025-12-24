@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+  <title>Página Não Encontrada | CodeSV</title>
+  <th:block th:replace="~{fragments :: head-common}"></th:block>
+</head>
+<body>
+
+<div th:replace="~{fragments :: top-nav}"></div>
+
+<div class="container d-flex flex-column align-items-center justify-content-center" style="min-height: 60vh;">
+
+  <h1 class="codesv-title" style="font-size: 8rem; margin-bottom: 0;">404</h1>
+
+  <div class="text-center">
+    <h2 class="text-white mb-3">Snippet perdido no espaço?</h2>
+    <p class="text-muted mb-4" style="max-width: 500px;">
+      A página que você está procurando não existe ou foi movida.
+      Talvez o autor tenha excluído o código ou o link esteja incorreto.
+    </p>
+
+    <a href="/snippets" class="btn btn-primary btn-lg px-4">
+      <i class="bi bi-arrow-left"></i> Voltar para a Comunidade
+    </a>
+  </div>
+
+</div>
+
+<div th:replace="~{fragments :: footer}"></div>
+
+</body>
+</html>
