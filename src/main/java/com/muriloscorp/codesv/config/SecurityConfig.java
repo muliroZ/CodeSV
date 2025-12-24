@@ -26,6 +26,7 @@ public class SecurityConfig {
                     .requestMatchers(
                             "/snippets",
                             "/snippets/{id}",
+                            "/snippets/{id}/download",
                             "/snippets/new",
                             "/css/**",
                             "/js/**",

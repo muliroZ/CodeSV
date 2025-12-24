@@ -7,7 +7,10 @@ import com.muriloscorp.codesv.model.User;
 import com.muriloscorp.codesv.repository.UserRepository;
 import com.muriloscorp.codesv.service.SnippetService;
 import jakarta.validation.Valid;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 @Controller
@@ -156,5 +160,36 @@ public class SnippetController {
         snippetService.delete(id);
         redirect.addFlashAttribute("success", "Snippet excluído com sucesso!");
         return "redirect:/snippets";
+    }
+
+    @GetMapping("/{id}/download")
+    public ResponseEntity<ByteArrayResource> downloadSnippet(
+            @PathVariable UUID id,
+            @AuthenticationPrincipal OAuth2User principal
+    ) {
+        CodeSnippet snippet = snippetService.findById(id);
+        if (!snippet.isPublic() && !isOwner(principal, snippet)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Você não tem permissão para baixar esse código");
+        }
+
+        String extension = switch (snippet.getLanguage().toLowerCase()) {
+            case "java" -> ".java";
+            case "python" -> ".py";
+            case "javascript" -> ".js";
+            case "cpp" -> ".cpp";
+            case "sql" -> ".sql";
+            default -> ".txt";
+        };
+
+        String filename = snippet.getTitle().replaceAll("[^a-zA-Z0-9._-]", "_") + extension;
+
+        byte[] data = snippet.getContent().getBytes(StandardCharsets.UTF_8);
+        ByteArrayResource resource = new ByteArrayResource(data);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
+                .contentLength(data.length)
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(resource);
     }
 }
