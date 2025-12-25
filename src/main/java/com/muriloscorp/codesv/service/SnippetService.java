@@ -5,6 +5,8 @@ import com.muriloscorp.codesv.exception.SnippetNotFoundException;
 import com.muriloscorp.codesv.model.CodeSnippet;
 import com.muriloscorp.codesv.model.User;
 import com.muriloscorp.codesv.repository.SnippetRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,12 +27,12 @@ public class SnippetService {
         snippetRepository.save(snippet);
     }
 
-    public List<CodeSnippet> findAll(){
-        return snippetRepository.findByIsPublic(true);
+    public Page<CodeSnippet> findAll(Pageable pageable){
+        return snippetRepository.findByIsPublic(true, pageable);
     }
 
-    public List<CodeSnippet> findByAuthorId(UUID authorId) {
-        return snippetRepository.findByAuthorId(authorId);
+    public Page<CodeSnippet> findByAuthorId(UUID authorId, Pageable pageable) {
+        return snippetRepository.findByAuthorId(authorId, pageable);
     }
 
     public CodeSnippet findById(UUID id) {

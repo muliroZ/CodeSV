@@ -8,6 +8,10 @@ import com.muriloscorp.codesv.repository.UserRepository;
 import com.muriloscorp.codesv.service.SnippetService;
 import jakarta.validation.Valid;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -46,12 +50,19 @@ public class SnippetController {
     @GetMapping
     public String listAll(
             Model model, @AuthenticationPrincipal OAuth2User principal,
-            @RequestParam(name = "filter", required = false, defaultValue = "my") String filter
+            @RequestParam(name = "filter", required = false, defaultValue = "my") String filter,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "8") int size
     ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+
+        Page<CodeSnippet> snippetPage;
+
         if (principal == null) {
-            model.addAttribute("snippets", snippetService.findAll());
+            snippetPage = snippetService.findAll(pageable);
+            model.addAttribute("snippets", snippetPage);
             model.addAttribute("pageTitle", "Explorar Comunidade");
-            model.addAttribute("activerFilter", "all");
+            model.addAttribute("activeFilter", "all");
             return "snippet-list";
         }
 
@@ -60,12 +71,14 @@ public class SnippetController {
                 .orElseThrow(() -> new UserNotFoundException("Erro de sessão."));
 
         if ("all".equals(filter)) {
-            model.addAttribute("snippets", snippetService.findAll());
+            snippetPage = snippetService.findAll(pageable);
+            model.addAttribute("snippets", snippetPage);
             model.addAttribute("pageTitle", "Explorar Comunidade");
             model.addAttribute("activeFilter", "all");
             model.addAttribute("isPersonalView", false);
         } else {
-            model.addAttribute("snippets", snippetService.findByAuthorId(user.getId()));
+            snippetPage = snippetService.findByAuthorId(user.getId(), pageable);
+            model.addAttribute("snippets", snippetPage);
             model.addAttribute("pageTitle", "Meus Snippets");
             model.addAttribute("activeFilter", "my");
             model.addAttribute("isPersonalView", true);

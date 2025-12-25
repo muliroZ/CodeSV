@@ -5,6 +5,32 @@
 <head>
   <title>CodeSV</title>
   <th:block th:replace="~{fragments :: head-common}"></th:block>
+
+  <style>
+    .page-item.active .page-link {
+      background-color: #198754;
+      border-color: #198754;
+      color: white;
+    }
+    .page-link {
+      background-color: #212529;
+      color: #adb5bd;
+      border-color: #495057;
+    }
+    .page-link:hover {
+      background-color: #2c3034;
+      color: white;
+      border-color: #495057;
+    }
+    .page-item.disabled .page-link {
+      background-color: #1a1d20;
+      border-color: #343a40;
+      color: #495057;
+    }
+    .pagination {
+      margin-bottom: 0;
+    }
+  </style>
 </head>
 <body>
 
@@ -47,12 +73,14 @@
 
   <div class="row">
     <div class="col-md-4 mb-4" th:each="snippet : ${snippets}">
-      <div class="card h-100 bg-dark border-secondary text-white">
+      <div class="card h-100 bg-dark border-secondary text-white shadow-sm hover-effect">
         <div class="card-body">
           <span class="badge bg-secondary mb-2" th:text="${snippet.language}">Java</span>
           <h6 class="card-title text-truncate" th:text="${snippet.title}">Título</h6>
           <small class="text-muted" th:text="${#temporals.format(snippet.createdAt, 'dd/MM/yyyy')}"></small>
-          <span class="badge bg-secondary mb-2" th:text="'Por: ' + ${snippet.getAuthor().getLogin()}">Autor</span>
+          <div class="mt-2">
+            <span class="badge border border-secondary text-muted" th:text="'User: ' + ${snippet.getAuthor().getLogin()}">Autor</span>
+          </div>
         </div>
         <div class="card-footer border-secondary bg-transparent">
           <a th:href="@{/snippets/{id}(id=${snippet.id})}" class="btn btn-sm btn-light w-100">Visualizar</a>
@@ -61,12 +89,34 @@
     </div>
   </div>
 
-  <div th:if="${#lists.isEmpty(snippets)}" class="text-center py-5">
+  <div th:if="${snippets.isEmpty()}" class="text-center py-5">
     <p class="text-muted styled">
       <span th:if="${isPersonalView}">console.<span style="color: #ff852e">warn</span><span style="color: #ffbd2e">(</span><span style="color: #9acd23">"Você ainda não tem snippets. Crie o primeiro!"</span><span style="color: #ffbd2e">)</span>;</span>
       <span th:unless="${isPersonalView}">console.<span style="color: #ff852e">log</span><span style="color: #ffbd2e">(</span><span style="color: #9acd23">"Nenhum snippet público encontrado."</span><span style="color: #ffbd2e">)</span>;</span>
     </p>
   </div>
+
+  <nav aria-label="Navegação" class="mt-4 border-top border-secondary pt-3" th:if="${snippets.totalPages > 1}">
+    <ul class="pagination justify-content-center">
+      <li class="page-item" th:classappend="${snippets.first} ? 'disabled'">
+        <a class="page-link"
+           th:href="@{/snippets(page=${snippets.number - 1}, filter=${activeFilter})}"
+           tabindex="-1">Anterior</a>
+      </li>
+
+      <li class="page-item" th:each="i : ${#numbers.sequence(0, snippets.totalPages - 1)}"
+          th:classappend="${snippets.number == i} ? 'active'">
+        <a class="page-link"
+           th:href="@{/snippets(page=${i}, filter=${activeFilter})}"
+           th:text="${i + 1}">1</a>
+      </li>
+
+      <li class="page-item" th:classappend="${snippets.last} ? 'disabled'">
+        <a class="page-link"
+           th:href="@{/snippets(page=${snippets.number + 1}, filter=${activeFilter})}">Próximo</a>
+      </li>
+    </ul>
+  </nav>
 </div>
 
 <footer th:replace="~{fragments :: footer}"></footer>
