@@ -5,7 +5,9 @@ import com.muriloscorp.codesv.exception.UserNotFoundException;
 import com.muriloscorp.codesv.model.CodeSnippet;
 import com.muriloscorp.codesv.model.User;
 import com.muriloscorp.codesv.repository.UserRepository;
+import com.muriloscorp.codesv.service.RateLimitingService;
 import com.muriloscorp.codesv.service.SnippetService;
+import io.github.bucket4j.Bucket;
 import jakarta.validation.Valid;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
@@ -34,10 +36,12 @@ public class SnippetController {
 
     private final SnippetService snippetService;
     private final UserRepository userRepository;
+    private final RateLimitingService rateLimitingService;
 
-    public SnippetController(SnippetService snippetService, UserRepository userRepository) {
+    public SnippetController(SnippetService snippetService, UserRepository userRepository, RateLimitingService rateLimitingService) {
         this.snippetService = snippetService;
         this.userRepository = userRepository;
+        this.rateLimitingService = rateLimitingService;
     }
 
     public boolean isOwner(OAuth2User principal, CodeSnippet snippet) {
@@ -109,6 +113,7 @@ public class SnippetController {
     @PostMapping("/save")
     public String saveSnippet(@Valid @ModelAttribute("snippetForm") SnippetRequest request,
                               BindingResult result, RedirectAttributes redirect,
+                              Model model,
                               @AuthenticationPrincipal OAuth2User principal
                               ) {
         if (result.hasErrors()) {
@@ -116,6 +121,15 @@ public class SnippetController {
         }
 
         Long githubId = ((Number) principal.getAttributes().get("id")).longValue();
+
+        String userId = String.valueOf(githubId);
+        Bucket bucket = rateLimitingService.resolveBucket(userId);
+
+        if (!bucket.tryConsume(1)) {
+            model.addAttribute("error", "Você atingiu o limite de criação (5 snippets/min). Aguarde um pouco.");
+            return "snippet-form";
+        }
+
         User author = userRepository.findByGithubId(githubId)
                         .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado."));
 

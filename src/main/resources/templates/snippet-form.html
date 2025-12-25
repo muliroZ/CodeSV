@@ -29,6 +29,11 @@
     Criar Snippet
   </h2>
 
+  <div th:if="${error}" class="alert alert-warning alert-dismissible fade show" role="alert">
+    <i class="bi bi-exclamation-triangle-fill"></i> <span th:text="${error}">Erro</span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+
   <form id="snippetForm"
         th:action="${snippetId} == null ? @{/snippets/save} : @{/snippets/{id}/update(id=${snippetId})}"
         th:object="${snippetForm}"
