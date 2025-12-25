@@ -11,6 +11,14 @@
 
 ---
 
+## 🌐 Acesse o site
+
+O projeto está ativo e rodando em produção! Acesse agora e crie seu primeiro snippet:
+
+### 👉 **- [codesv.xyz](https://codesv.xyz) -**
+
+---
+
 ## ✨ Funcionalidades
 
 - **🔐 Autenticação Social:** Login seguro e rápido via **GitHub OAuth2**.
@@ -87,7 +95,7 @@ GITHUB_CLIENT_SECRET=seu_client_secret_aqui
 docker compose up -d --build
 ```
 
-Acesse a aplicação em: **http://localhost:8080/snippets**
+Acesse a aplicação em: **http://localhost:8080**
 
 ---
 
