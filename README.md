@@ -17,6 +17,10 @@ O projeto está ativo e rodando em produção! Acesse agora e crie seu primeiro 
 
 ### 👉 **- [codesv.xyz](https://codesv.xyz) -**
 
+
+> **Nota**: O domínio do site está correto, porém, o site encontra-se fora do ar, sem previsão para retorno. Caso retorne, avisarei por aqui.
+> O código fonte está funcional para ser usado localmente, siga as instruções na seção [**Como Rodar o Projeto**](#-como-rodar-o-projeto) para configurar e executar a aplicação em sua máquina.
+
 ---
 
 ## ✨ Funcionalidades
